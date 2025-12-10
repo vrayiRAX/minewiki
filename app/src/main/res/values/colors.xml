@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+
+    <color name="mc_background">#1D1D1D</color>
+    <color name="mc_bg_card">#2A2A2A</color>
+    <color name="mc_bg_main">#191919</color>
+    <color name="mc_green_face">#3C8527</color>
+    <color name="mc_green_pressed">#2A641C</color>
+    <color name="mc_green_shadow">#1E4D13</color>
+    <color name="mc_green_normal">#4CAF50</color>5
+
+    <color name="mc_input_bg">#121212</color>
+    <color name="mc_border">#48494A</color>
+
+    <color name="mc_gray_text">#DEDEDE</color>
+    <color name="mc_text_gray">#C4C4C4</color>
+</resources>
