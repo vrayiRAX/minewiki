@@ -21,3 +21,4 @@ dependencyResolutionManagement {
 
 rootProject.name = "MineWiki"
 include(":app")
+include(":myserver")

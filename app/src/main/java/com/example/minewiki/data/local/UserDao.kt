@@ -2,18 +2,18 @@ package com.example.minewiki.data.local
 
 import androidx.room.Dao
 import androidx.room.Insert
-import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import com.example.minewiki.data.model.User
 
 @Dao
 interface UserDao {
+    @Insert
+    suspend fun insertUser(user: UserEntity)
 
-    @Insert(onConflict = OnConflictStrategy.IGNORE)
-    suspend fun insertUser(user: User)
-    @Query("SELECT * FROM users_table WHERE email = :email AND password = :pass LIMIT 1")
-    suspend fun login(email: String, pass: String): User?
+    // Buscar si existe un usuario con ese email y contraseña (para el Login)
+    @Query("SELECT * FROM users WHERE email = :email AND password = :pass LIMIT 1")
+    suspend fun login(email: String, pass: String): UserEntity?
 
-    @Query("SELECT * FROM users_table WHERE email = :email LIMIT 1")
-    suspend fun getUserByEmail(email: String): User?
+    // Buscar datos por ID (para el Perfil)
+    @Query("SELECT * FROM users WHERE id = :userId LIMIT 1")
+    suspend fun getUserById(userId: Int): UserEntity?
 }
