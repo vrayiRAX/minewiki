@@ -7,14 +7,13 @@ import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.example.minewiki.R
-import com.example.minewiki.viewmodel.AuthViewModel
+import com.example.minewiki.data.local.AppDatabase
+import kotlinx.coroutines.launch
 
 class LoginFragment : Fragment(R.layout.fragment_login) {
-
-    private val viewModel: AuthViewModel by viewModels()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -24,24 +23,31 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
         val btnLogin = view.findViewById<Button>(R.id.btnLogin)
         val tvGoToRegister = view.findViewById<TextView>(R.id.tvGoToRegister)
 
-        // 2. Configurar botón de Login
         btnLogin.setOnClickListener {
             val email = etEmail.text.toString()
             val pass = etPass.text.toString()
-            viewModel.login(email, pass)
-        }
 
-        // 3. Observar resultado del Login
-        viewModel.loginState.observe(viewLifecycleOwner) { isSuccess ->
-            if (isSuccess) {
-                Toast.makeText(context, "¡Login Correcto!", Toast.LENGTH_SHORT).show()
-                findNavController().navigate(R.id.action_login_to_home)
-            } else {
-                Toast.makeText(context, "Error: Datos incorrectos", Toast.LENGTH_SHORT).show()
+            lifecycleScope.launch {
+                // CONSULTAR A LA BASE DE DATOS
+                val user = AppDatabase.getDatabase(requireContext()).userDao().login(email, pass)
+
+                if (user != null) {
+                    // ¡LOGIN CORRECTO!
+                    // Guardamos el ID del usuario en la "memoria rápida" del celular (SharedPreferences)
+                    val sharedPref = requireActivity().getSharedPreferences("MineWikiData", 0)
+                    val editor = sharedPref.edit()
+                    editor.putInt("current_user_id", user.id)
+                    editor.putString("current_user_name", user.name) // Guardamos el nombre también por comodidad
+                    editor.apply()
+
+                    Toast.makeText(context, "Bienvenido, ${user.name}", Toast.LENGTH_SHORT).show()
+                    findNavController().navigate(R.id.action_login_to_home)
+                } else {
+                    Toast.makeText(context, "Correo o contraseña incorrectos", Toast.LENGTH_SHORT).show()
+                }
             }
         }
 
-        // 4. Configurar botón de ir al Registro
         tvGoToRegister.setOnClickListener {
             findNavController().navigate(R.id.action_login_to_register)
         }

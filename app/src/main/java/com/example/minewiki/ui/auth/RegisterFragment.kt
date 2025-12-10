@@ -7,14 +7,14 @@ import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.example.minewiki.R
-import com.example.minewiki.viewmodel.AuthViewModel
+import com.example.minewiki.data.local.AppDatabase
+import com.example.minewiki.data.local.UserEntity
+import kotlinx.coroutines.launch
 
 class RegisterFragment : Fragment(R.layout.fragment_register) {
-
-    private val viewModel: AuthViewModel by viewModels()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -29,15 +29,19 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
             val name = etName.text.toString()
             val email = etEmail.text.toString()
             val pass = etPass.text.toString()
-            viewModel.register(name, email, pass)
-        }
 
-        viewModel.loginState.observe(viewLifecycleOwner) { isSuccess ->
-            if (isSuccess) {
-                Toast.makeText(context, "¡Cuenta Crafteada!", Toast.LENGTH_SHORT).show()
-                findNavController().navigate(R.id.action_register_to_home)
-            } else {
-                Toast.makeText(context, "Faltan datos", Toast.LENGTH_SHORT).show()
+            if (name.isEmpty() || email.isEmpty() || pass.isEmpty()) {
+                Toast.makeText(context, "Completa todos los campos", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+
+            // GUARDAR EN BASE DE DATOS
+            lifecycleScope.launch {
+                val newUser = UserEntity(name = name, email = email, password = pass)
+                AppDatabase.getDatabase(requireContext()).userDao().insertUser(newUser)
+
+                Toast.makeText(context, "¡Cuenta Crafteada! Ahora inicia sesión.", Toast.LENGTH_LONG).show()
+                findNavController().navigate(R.id.action_register_to_login)
             }
         }
 

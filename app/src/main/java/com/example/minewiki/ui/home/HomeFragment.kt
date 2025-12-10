@@ -11,12 +11,12 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.lifecycleScope // <--- IMPORTANTE
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import coil.load
 import com.example.minewiki.R
 import com.example.minewiki.viewmodel.HomeViewModel
-import kotlinx.coroutines.launch // <--- IMPORTANTE
+import kotlinx.coroutines.launch
 
 class HomeFragment : Fragment(R.layout.fragment_home) {
 
@@ -25,55 +25,52 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // --- REFERENCIAS UI ---
+        // --- 1. REFERENCIAS UI ---
         val cardProfile = view.findViewById<View>(R.id.cardProfile)
         val imgNavProfile = view.findViewById<ImageView>(R.id.imgNavProfile)
         val btnMenu = view.findViewById<ImageButton>(R.id.btnNavMenu)
         val tvWelcome = view.findViewById<TextView>(R.id.tvWelcomeUser)
 
-        // Cajas de Versiones
+        // Variable del consejo (puede ser nula si el XML no cargó bien)
+        val tvDailyTip = view.findViewById<TextView>(R.id.tvDailyTip)
+
         val layoutJava = view.findViewById<LinearLayout>(R.id.layoutJava)
         val tvJavaVersion = view.findViewById<TextView>(R.id.tvJavaVersion)
         val layoutBedrock = view.findViewById<LinearLayout>(R.id.layoutBedrock)
         val tvBedrockVersion = view.findViewById<TextView>(R.id.tvBedrockVersion)
 
-        // --- SOLUCIÓN ERROR 1: Definimos la variable tvDailyTip ---
-        // Asegúrate de que en fragment_home.xml exista un TextView con id="@+id/tvDailyTip"
-        val tvDailyTip = view.findViewById<TextView>(R.id.tvDailyTip)
-
-        // --- CARGAR FOTO PERFIL ---
+        // --- 2. GESTIÓN DE USUARIO Y FOTO ---
         val sharedPref = requireActivity().getSharedPreferences("MineWikiData", 0)
-        val savedImage = sharedPref.getString("profile_image", null)
+
+        val userId = sharedPref.getInt("current_user_id", -1)
+
+        // --- AQUÍ ESTABA EL ERROR ---
+        // Agregamos ?: "Explorador" al final para asegurar que NUNCA sea nulo
+        val userName = sharedPref.getString("current_user_name", "Explorador") ?: "Explorador"
+
+        // Cargar foto
+        val savedImage = sharedPref.getString("profile_image_$userId", null)
         if (savedImage != null) {
             imgNavProfile.load(savedImage)
         }
 
-        // --- NOMBRE USUARIO ---
-        homeViewModel.text.observe(viewLifecycleOwner) {
-            tvWelcome.text = "¡HOLA EXPLORADOR!"
-        }
+        // Saludo (Ahora userName ya no es nulo, así que .uppercase() funciona)
+        tvWelcome.text = "¡HOLA ${userName.uppercase()}!"
 
-        // --- MICROSERVICIO (SOLUCIÓN ERROR 2 y 3) ---
-        // Usamos lifecycleScope.launch para crear la Corrutina
-        if (tvDailyTip != null) { // Verificamos que exista para que no crashee si olvidaste el XML
+        // --- 3. MICROSERVICIO ---
+        if (tvDailyTip != null) {
             lifecycleScope.launch {
                 try {
-                    // Mensaje de carga inicial
                     tvDailyTip.text = "Consultando a la Mesa de Encantamientos..."
-
-                    // Llamada al servidor (Función Suspendida)
                     val respuesta = com.example.minewiki.data.remote.MicroserviceClient.instance.obtenerConsejo()
-
-                    // Mostrar resultado
                     tvDailyTip.text = respuesta.mensaje
                 } catch (e: Exception) {
-                    Log.e("MicroError", "Fallo al conectar: ${e.message}")
-                    tvDailyTip.text = "Inicia el servidor (Main.kt) para ver consejos."
+                    tvDailyTip.text = "Inicia el servidor para ver consejos."
                 }
             }
         }
 
-        // --- CLICKS ---
+        // --- 4. CLICKS ---
         cardProfile.setOnClickListener {
             findNavController().navigate(R.id.action_home_to_profile)
         }
@@ -105,6 +102,8 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
                     true
                 }
                 2 -> {
+                    val sharedPref = requireActivity().getSharedPreferences("MineWikiData", 0)
+                    sharedPref.edit().remove("current_user_id").apply()
                     findNavController().navigate(R.id.action_home_to_login)
                     true
                 }

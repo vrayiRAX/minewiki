@@ -1,89 +1,206 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/mc_background">
+    android:background="@color/mc_background"
+    android:fillViewport="true">
 
-    <ScrollView
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="20dp"
+        android:gravity="center_horizontal">
 
-        <LinearLayout
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="HOJA DE PERSONAJE"
+            android:textColor="@color/mc_gray_text"
+            android:textStyle="bold"
+            android:letterSpacing="0.1"
+            android:layout_marginBottom="30dp"/>
+
+        <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:padding="20dp"
-            android:gravity="center_horizontal">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="MI INVENTARIO"
-                android:textColor="@color/mc_gray_text"
-                android:textStyle="bold"
-                android:layout_marginBottom="30dp"/>
-
-            <androidx.cardview.widget.CardView
-                android:layout_width="160dp"
-                android:layout_height="160dp"
-                app:cardBackgroundColor="@color/mc_bg_card"
-                app:cardCornerRadius="0dp"
-                app:cardElevation="8dp"
-                android:layout_marginBottom="20dp">
-
-                <ImageView
-                    android:id="@+id/imgProfileLarge"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:src="@android:drawable/sym_def_app_icon"
-                    android:background="#333333"
-                    android:scaleType="centerCrop"/>
-            </androidx.cardview.widget.CardView>
-
-            <TextView
-                android:id="@+id/tvProfileName"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Steve"
-                android:textColor="@color/white"
-                android:textSize="26sp"
-                android:textStyle="bold"
-                android:layout_marginBottom="5dp"/>
-
-            <TextView
-                android:id="@+id/tvProfileEmail"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="steve@minecraft.net"
-                android:textColor="@color/mc_green_face"
-                android:layout_marginBottom="30dp"/>
+            app:cardBackgroundColor="@color/mc_bg_card"
+            app:cardCornerRadius="0dp"
+            app:cardElevation="4dp"
+            android:layout_marginBottom="20dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:gravity="center"
+                android:padding="20dp">
 
-                <androidx.appcompat.widget.AppCompatButton
-                    android:id="@+id/btnCamera"
-                    android:layout_width="match_parent"
-                    android:layout_height="55dp"
-                    android:background="@drawable/btn_mc_3d"
-                    android:text="TOMAR FOTO (CÁMARA)"
+                <androidx.cardview.widget.CardView
+                    android:layout_width="140dp"
+                    android:layout_height="140dp"
+                    app:cardCornerRadius="70dp"
+                    app:cardBackgroundColor="@color/mc_green_face"
+                    android:layout_marginBottom="15dp">
+
+                    <ImageView
+                        android:id="@+id/imgProfileLarge"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:padding="4dp"
+                        android:src="@android:drawable/sym_def_app_icon"
+                        android:background="@color/black"
+                        android:scaleType="centerCrop"/>
+                </androidx.cardview.widget.CardView>
+
+                <TextView
+                    android:id="@+id/tvProfileName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Cargando..."
                     android:textColor="@color/white"
+                    android:textSize="24sp"
+                    android:textStyle="bold"/>
+
+                <TextView
+                    android:id="@+id/tvProfileEmail"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="usuario@minewiki.com"
+                    android:textColor="@color/mc_gray_text"
+                    android:layout_marginBottom="10dp"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="RANGO: DIAMANTE"
+                    android:background="@color/mc_input_bg"
+                    android:textColor="#55FFFF"
                     android:textStyle="bold"
+                    android:paddingHorizontal="10dp"
+                    android:paddingVertical="5dp"
                     android:layout_marginBottom="15dp"/>
 
-                <androidx.appcompat.widget.AppCompatButton
-                    android:id="@+id/btnGallery"
-                    android:layout_width="match_parent"
-                    android:layout_height="55dp"
-                    android:background="@drawable/btn_mc_3d"
-                    android:text="ABRIR GALERÍA"
+                <ProgressBar
+                    style="?android:attr/progressBarStyleHorizontal"
+                    android:layout_width="200dp"
+                    android:layout_height="10dp"
+                    android:progress="75"
+                    android:progressTint="@color/mc_green_face"
+                    android:backgroundTint="#333333"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Nivel 30"
+                    android:textColor="@color/mc_green_face"
+                    android:textSize="10sp"/>
+
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginBottom="20dp">
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:background="@color/mc_bg_card"
+                android:padding="15dp"
+                android:gravity="center"
+                android:layout_marginEnd="10dp">
+                <ImageView
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:src="@android:drawable/ic_menu_myplaces"
+                    app:tint="#FF5555"
+                    android:layout_marginBottom="5dp"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="VIDAS"
+                    android:textColor="@color/mc_gray_text"
+                    android:textSize="10sp"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Hardcore"
                     android:textColor="@color/white"
                     android:textStyle="bold"/>
             </LinearLayout>
 
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:background="@color/mc_bg_card"
+                android:padding="15dp"
+                android:gravity="center"
+                android:layout_marginStart="10dp">
+                <ImageView
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:src="@android:drawable/ic_menu_recent_history"
+                    app:tint="@color/mc_green_face"
+                    android:layout_marginBottom="5dp"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="TIEMPO"
+                    android:textColor="@color/mc_gray_text"
+                    android:textSize="10sp"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="120 Días"
+                    android:textColor="@color/white"
+                    android:textStyle="bold"/>
+            </LinearLayout>
         </LinearLayout>
-    </ScrollView>
-</FrameLayout>
+
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="EDITAR SKIN (PERFIL)"
+            android:textColor="@color/mc_gray_text"
+            android:textStyle="bold"
+            android:layout_marginBottom="10dp"/>
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btnCamera"
+            android:layout_width="match_parent"
+            android:layout_height="55dp"
+            android:background="@drawable/btn_mc_3d"
+            android:text="USAR CÁMARA"
+            android:textColor="@color/white"
+            android:textStyle="bold"
+            android:layout_marginBottom="10dp"/>
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btnGallery"
+            android:layout_width="match_parent"
+            android:layout_height="55dp"
+            android:background="@drawable/btn_mc_3d"
+            android:text="ABRIR GALERÍA"
+            android:textColor="@color/white"
+            android:textStyle="bold"
+            android:layout_marginBottom="25dp"/>
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btnLogout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="?attr/selectableItemBackground"
+            android:text="CERRAR SESIÓN"
+            android:textColor="#FF5555"
+            android:textStyle="bold"/>
+
+    </LinearLayout>
+</ScrollView>
