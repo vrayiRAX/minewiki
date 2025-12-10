@@ -26,7 +26,7 @@ class ProfileFragment : Fragment() {
 
     private var imageUri: Uri? = null
 
-    // Launcher para abrir la cámara
+    //abrir la cámara
     private val cameraLauncher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == Activity.RESULT_OK) {
@@ -34,7 +34,7 @@ class ProfileFragment : Fragment() {
             }
         }
 
-    // Launcher para seleccionar imagen de la galería
+    //seleccionar imagen de la galería
     private val galleryLauncher =
         registerForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
             if (uri != null) {
@@ -42,13 +42,11 @@ class ProfileFragment : Fragment() {
             }
         }
 
-    // Permisos para cámara
     private val requestCameraPermission =
         registerForActivityResult(ActivityResultContracts.RequestPermission()) { granted ->
             if (granted) openCamera()
         }
 
-    // Permisos para galería
     private val requestGalleryPermission =
         registerForActivityResult(ActivityResultContracts.RequestPermission()) { granted ->
             if (granted) openGallery()
@@ -70,9 +68,6 @@ class ProfileFragment : Fragment() {
         return view
     }
 
-    /** ================================
-     *     PERMISOS
-     *  ================================= */
     private fun checkCameraPermission() {
         when {
             ContextCompat.checkSelfPermission(
@@ -101,9 +96,6 @@ class ProfileFragment : Fragment() {
         }
     }
 
-    /** ================================
-     *     ACCIONES
-     *  ================================= */
     private fun openCamera() {
         val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
 

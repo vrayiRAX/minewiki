@@ -19,7 +19,6 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // Referencias a los IDs del nuevo diseño XML
         val etName = view.findViewById<EditText>(R.id.etRegisterName)
         val etEmail = view.findViewById<EditText>(R.id.etRegisterEmail)
         val etPass = view.findViewById<EditText>(R.id.etRegisterPass)
@@ -30,8 +29,6 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
             val name = etName.text.toString()
             val email = etEmail.text.toString()
             val pass = etPass.text.toString()
-
-            // Aquí llamamos a la función de registrar
             viewModel.register(name, email, pass)
         }
 

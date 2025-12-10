@@ -7,12 +7,10 @@ import retrofit2.http.GET
 
 interface MinecraftApiService {
 
-    // Esta es la dirección exacta donde está la lista de items (JSON)
     @GET("PrismarineJS/minecraft-data/master/data/pc/1.19/items.json")
     suspend fun getItems(): List<ApiItem>
 }
 
-// Objeto Singleton para usar la conexión en toda la app
 object RetrofitClient {
     private const val BASE_URL = "https://raw.githubusercontent.com/"
 

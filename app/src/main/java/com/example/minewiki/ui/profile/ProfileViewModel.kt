@@ -16,9 +16,8 @@ class ProfileViewModel : ViewModel() {
     }
     val email: LiveData<String> = _email
 
-    // Nivel de experiencia (XP)
     private val _xpLevel = MutableLiveData<Int>().apply {
-        value = 27 // Nivel de ejemplo
+        value = 27
     }
     val xpLevel: LiveData<Int> = _xpLevel
 }

@@ -9,7 +9,6 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
-// IMPORTANTE: Asegúrate de que esta línea sea TU paquete
 import com.example.minewiki.R
 import com.example.minewiki.viewmodel.AuthViewModel
 
@@ -20,12 +19,9 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // 1. Encontramos las vistas por su ID
         val etEmail = view.findViewById<EditText>(R.id.etLoginEmail)
         val etPass = view.findViewById<EditText>(R.id.etLoginPass)
         val btnLogin = view.findViewById<Button>(R.id.btnLogin)
-
-        // Aquí estaba tu error antes. Ahora funcionará porque el XML está correcto.
         val tvGoToRegister = view.findViewById<TextView>(R.id.tvGoToRegister)
 
         // 2. Configurar botón de Login

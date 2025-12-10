@@ -12,8 +12,6 @@ class WikiViewModel : ViewModel() {
 
     private val _items = MutableLiveData<List<ApiItem>>()
     val items: LiveData<List<ApiItem>> = _items
-
-    // Variable para controlar si está cargando (para poner un progress bar si quieres)
     private val _isLoading = MutableLiveData<Boolean>()
     val isLoading: LiveData<Boolean> = _isLoading
 
@@ -25,14 +23,12 @@ class WikiViewModel : ViewModel() {
         viewModelScope.launch {
             _isLoading.value = true
             try {
-                // LLAMADA A LA API (Internet)
+                // LLAMA LA API
                 val response = RetrofitClient.instance.getItems()
-
-                // Filtramos un poco para que no sean 1000 items de golpe (opcional)
                 _items.value = response.take(100)
 
             } catch (e: Exception) {
-                // Manejo de error (Sin internet, etc)
+                // Manejo de error
                 e.printStackTrace()
             } finally {
                 _isLoading.value = false

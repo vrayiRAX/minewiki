@@ -28,26 +28,21 @@ class BlocksAdapter(private var blockList: List<ApiItem>) :
 
     override fun onBindViewHolder(holder: BlockViewHolder, position: Int) {
         val item = blockList[position]
-
-        // 1. Nombre visible (Ej: "Diamond Sword")
         holder.tvName.text = item.displayName
         holder.tvDesc.text = "ID: ${item.id}"
 
-        // 2. Limpieza del nombre para la URL (Ej: "diamond_sword")
         val cleanName = item.name
             .replace("minecraft:", "")
             .trim()
             .lowercase()
 
-        // 3. URL DE LA IMAGEN (Probamos con la versión 1.19.1)
         val imageUrl = "https://raw.githubusercontent.com/PrismarineJS/minecraft-assets/master/data/1.19.1/items/$cleanName.png"
 
         // 4. CARGAR CON COIL + DETECCIÓN DE ERRORES
         holder.imgBlock.load(imageUrl) {
             crossfade(true)
-            placeholder(android.R.drawable.ic_menu_rotate) // Cargando...
-
-            // Si falla, mostramos un icono rojo y avisamos al Logcat
+            placeholder(android.R.drawable.ic_menu_rotate)
+            
             error(android.R.drawable.stat_notify_error)
             listener(
                 onSuccess = { _, _ ->
@@ -55,7 +50,6 @@ class BlocksAdapter(private var blockList: List<ApiItem>) :
                 },
                 onError = { _, result ->
                     Log.e("WikiError", "FALLÓ $cleanName. Razón: ${result.throwable.message}")
-                    // Intento secundario: A veces los bloques están en otra carpeta
                     val blockUrl = "https://raw.githubusercontent.com/PrismarineJS/minecraft-assets/master/data/1.19.1/blocks/$cleanName.png"
                     holder.imgBlock.load(blockUrl)
                 }
