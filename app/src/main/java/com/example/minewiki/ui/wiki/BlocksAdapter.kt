@@ -1,6 +1,5 @@
 package com.example.minewiki.ui.wiki
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -33,7 +32,7 @@ class BlocksAdapter(private var blockList: List<ApiItem>) :
         val item = blockList[position]
         val cleanName = item.name.replace("minecraft:", "").trim().lowercase()
 
-        // 1. NOMBRE Y ID Y STACK
+        // NOMBRE Y ID Y STACK
         holder.tvName.text = item.displayName
         holder.tvDesc.text = "ID: ${item.name}"
         holder.tvStack.text = "STACK: ${item.stackSize}"
@@ -57,7 +56,7 @@ class BlocksAdapter(private var blockList: List<ApiItem>) :
         holder.tvLocation.setTextColor(colorLocation)
 
 
-        // 4. CARGAR IMAGEN
+        // CARGAR IMAGEN
         val imageUrl = "https://raw.githubusercontent.com/PrismarineJS/minecraft-assets/master/data/1.19.1/items/$cleanName.png"
 
         holder.imgBlock.load(imageUrl) {
@@ -66,7 +65,6 @@ class BlocksAdapter(private var blockList: List<ApiItem>) :
             error(android.R.drawable.stat_notify_error)
             listener(
                 onError = { _, _ ->
-                    // falla un items
                     val blockUrl = "https://raw.githubusercontent.com/PrismarineJS/minecraft-assets/master/data/1.19.1/blocks/$cleanName.png"
                     holder.imgBlock.load(blockUrl)
                 }

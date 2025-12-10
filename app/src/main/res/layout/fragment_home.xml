@@ -85,6 +85,7 @@
             android:background="@color/mc_green_face"/>
 
         <ScrollView
+            android:id="@+id/scrollViewContent"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
@@ -92,11 +93,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:paddingBottom="40dp"> <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:padding="20dp">
+                android:padding="20dp"
+                android:paddingBottom="40dp">
 
                 <androidx.cardview.widget.CardView
                     android:layout_width="match_parent"
@@ -312,6 +310,7 @@
                         </LinearLayout>
                     </LinearLayout>
                 </androidx.cardview.widget.CardView>
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -416,7 +415,6 @@
                     </LinearLayout>
                 </LinearLayout>
 
-            </LinearLayout>
             </LinearLayout>
         </ScrollView>
     </LinearLayout>

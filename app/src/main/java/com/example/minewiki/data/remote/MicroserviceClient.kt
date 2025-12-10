@@ -11,7 +11,6 @@ interface MicroserviceApi {
 }
 
 object MicroserviceClient {
-    // IMPORTANTE: 10.0.2.2 es "localhost" desde el punto de vista del emulador
     private const val BASE_URL = "http://192.168.1.5:8080/"
 
     val instance: MicroserviceApi by lazy {

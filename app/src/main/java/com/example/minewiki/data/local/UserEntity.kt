@@ -8,6 +8,6 @@ data class UserEntity(
     @PrimaryKey(autoGenerate = true) val id: Int = 0,
     val name: String,
     val email: String,
-    val password: String, // En una app real, esto se encriptaría
-    val profileImage: String? = null // Guardaremos la ruta de la foto aquí
+    val password: String,
+    val profileImage: String? = null
 )

@@ -17,7 +17,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import coil.load
 import com.example.minewiki.R
-import com.example.minewiki.data.local.AppDatabase // Si te da error aquí, cambia 'local' por 'db'
+import com.example.minewiki.data.local.AppDatabase
 import kotlinx.coroutines.launch
 import java.io.File
 
@@ -27,7 +27,7 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
     private var currentUserId: Int = -1
     private var latestTmpUri: Uri? = null
 
-    // 1. LANZADOR DE GALERÍA
+    // GALERÍA
     private val selectFromGallery = registerForActivityResult(ActivityResultContracts.GetContent()) { uri ->
         uri?.let {
             imgProfile.load(it)
@@ -35,7 +35,7 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
         }
     }
 
-    // 2. LANZADOR DE CÁMARA
+    //CÁMARA
     private val takePhoto = registerForActivityResult(ActivityResultContracts.TakePicture()) { isSuccess ->
         if (isSuccess && latestTmpUri != null) {
             imgProfile.load(latestTmpUri)
@@ -43,8 +43,6 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
             Toast.makeText(context, "¡Foto capturada!", Toast.LENGTH_SHORT).show()
         }
     }
-
-    // 3. SOLICITUD DE PERMISO
     private val requestPermissionLauncher = registerForActivityResult(
         ActivityResultContracts.RequestPermission()
     ) { isGranted: Boolean ->
@@ -58,28 +56,19 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // --- CORRECCIÓN DE ERRORES AQUÍ ---
-        // Agregamos <ImageView>, <TextView> y <Button> para que Kotlin sepa qué son.
-
         imgProfile = view.findViewById<ImageView>(R.id.imgProfileLarge)
 
         val tvName = view.findViewById<TextView>(R.id.tvProfileName)
         val tvEmail = view.findViewById<TextView>(R.id.tvProfileEmail)
-
         val btnGallery = view.findViewById<Button>(R.id.btnGallery)
         val btnCamera = view.findViewById<Button>(R.id.btnCamera)
         val btnLogout = view.findViewById<Button>(R.id.btnLogout)
-
-        // ----------------------------------
-
-        // Cargar Usuario
         val sharedPref = requireActivity().getSharedPreferences("MineWikiData", 0)
         currentUserId = sharedPref.getInt("current_user_id", -1)
 
         if (currentUserId != -1) {
             lifecycleScope.launch {
                 try {
-                    // Nota: Si 'data.local' te da error, cámbialo a 'data.db'
                     val db = AppDatabase.getDatabase(requireContext())
                     val user = db.userDao().getUserById(currentUserId)
                     if (user != null) {
@@ -94,13 +83,12 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
             }
         }
 
-        // ACCIONES DE BOTONES
+        // AC BOTONES
         btnGallery.setOnClickListener {
             selectFromGallery.launch("image/*")
         }
 
         btnCamera.setOnClickListener {
-            // Verificar permiso antes de abrir
             if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
                 abrirCamara()
             } else {
@@ -125,7 +113,6 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
                 deleteOnExit()
             }
 
-            // Usamos packageName para evitar errores de escritura
             val authority = "${requireContext().packageName}.fileprovider"
 
             latestTmpUri = FileProvider.getUriForFile(

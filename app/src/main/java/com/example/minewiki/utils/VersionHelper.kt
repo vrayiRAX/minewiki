@@ -13,7 +13,6 @@ object VersionHelper {
     }
 
     fun isCompatible(serverVersion: String, clientVersion: String): Boolean {
-        // Lógica simple: Deben ser idénticas para ser compatibles
         return serverVersion == clientVersion
     }
 }

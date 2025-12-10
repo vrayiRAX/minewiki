@@ -23,12 +23,10 @@ class WikiViewModel : ViewModel() {
         viewModelScope.launch {
             _isLoading.value = true
             try {
-                // LLAMA LA API
                 val response = RetrofitClient.instance.getItems()
                 _items.value = response.take(100)
 
             } catch (e: Exception) {
-                // Manejo de error
                 e.printStackTrace()
             } finally {
                 _isLoading.value = false

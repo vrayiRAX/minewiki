@@ -9,11 +9,9 @@ interface UserDao {
     @Insert
     suspend fun insertUser(user: UserEntity)
 
-    // Buscar si existe un usuario con ese email y contraseña (para el Login)
     @Query("SELECT * FROM users WHERE email = :email AND password = :pass LIMIT 1")
     suspend fun login(email: String, pass: String): UserEntity?
 
-    // Buscar datos por ID (para el Perfil)
     @Query("SELECT * FROM users WHERE id = :userId LIMIT 1")
     suspend fun getUserById(userId: Int): UserEntity?
 }

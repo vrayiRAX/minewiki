@@ -28,16 +28,13 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
             val pass = etPass.text.toString()
 
             lifecycleScope.launch {
-                // CONSULTAR A LA BASE DE DATOS
                 val user = AppDatabase.getDatabase(requireContext()).userDao().login(email, pass)
 
                 if (user != null) {
-                    // ¡LOGIN CORRECTO!
-                    // Guardamos el ID del usuario en la "memoria rápida" del celular (SharedPreferences)
                     val sharedPref = requireActivity().getSharedPreferences("MineWikiData", 0)
                     val editor = sharedPref.edit()
                     editor.putInt("current_user_id", user.id)
-                    editor.putString("current_user_name", user.name) // Guardamos el nombre también por comodidad
+                    editor.putString("current_user_name", user.name)
                     editor.apply()
 
                     Toast.makeText(context, "Bienvenido, ${user.name}", Toast.LENGTH_SHORT).show()

@@ -1,7 +1,6 @@
 package com.example.minewiki.ui.home
 
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.widget.ImageButton
 import android.widget.ImageView
@@ -25,52 +24,52 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // --- 1. REFERENCIAS UI ---
         val cardProfile = view.findViewById<View>(R.id.cardProfile)
         val imgNavProfile = view.findViewById<ImageView>(R.id.imgNavProfile)
         val btnMenu = view.findViewById<ImageButton>(R.id.btnNavMenu)
         val tvWelcome = view.findViewById<TextView>(R.id.tvWelcomeUser)
-
-        // Variable del consejo (puede ser nula si el XML no cargó bien)
+        val contentLayout = view.findViewById<View>(R.id.scrollViewContent)
         val tvDailyTip = view.findViewById<TextView>(R.id.tvDailyTip)
 
         val layoutJava = view.findViewById<LinearLayout>(R.id.layoutJava)
         val tvJavaVersion = view.findViewById<TextView>(R.id.tvJavaVersion)
         val layoutBedrock = view.findViewById<LinearLayout>(R.id.layoutBedrock)
         val tvBedrockVersion = view.findViewById<TextView>(R.id.tvBedrockVersion)
-
-        // --- 2. GESTIÓN DE USUARIO Y FOTO ---
         val sharedPref = requireActivity().getSharedPreferences("MineWikiData", 0)
-
         val userId = sharedPref.getInt("current_user_id", -1)
 
-        // --- AQUÍ ESTABA EL ERROR ---
-        // Agregamos ?: "Explorador" al final para asegurar que NUNCA sea nulo
+        // Nombre de usuario
         val userName = sharedPref.getString("current_user_name", "Explorador") ?: "Explorador"
 
-        // Cargar foto
+        // Cargar foto guardada
         val savedImage = sharedPref.getString("profile_image_$userId", null)
         if (savedImage != null) {
             imgNavProfile.load(savedImage)
         }
 
-        // Saludo (Ahora userName ya no es nulo, así que .uppercase() funciona)
         tvWelcome.text = "¡HOLA ${userName.uppercase()}!"
+        val animation = android.view.animation.AnimationUtils.loadAnimation(context, R.anim.fade_in_up)
 
-        // --- 3. MICROSERVICIO ---
+        contentLayout?.startAnimation(animation)
+        cardProfile.startAnimation(animation)
+
+        // MICROSERVICIO
         if (tvDailyTip != null) {
             lifecycleScope.launch {
                 try {
                     tvDailyTip.text = "Consultando a la Mesa de Encantamientos..."
                     val respuesta = com.example.minewiki.data.remote.MicroserviceClient.instance.obtenerConsejo()
                     tvDailyTip.text = respuesta.mensaje
+
+                } catch (e: java.net.UnknownHostException) {
+                    tvDailyTip.text = "Sin conexión a internet :("
                 } catch (e: Exception) {
-                    tvDailyTip.text = "Inicia el servidor para ver consejos."
+                    tvDailyTip.text = "Inicia el servidor (Main.kt) para ver consejos."
                 }
             }
         }
 
-        // --- 4. CLICKS ---
+        // NAVEGACIÓN VERSIONES
         cardProfile.setOnClickListener {
             findNavController().navigate(R.id.action_home_to_profile)
         }
