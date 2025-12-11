@@ -11,7 +11,7 @@ import io.ktor.server.routing.*
 data class Consejo(val mensaje: String)
 
 fun main() {
-
+            //sacar ip   ipconfig
     embeddedServer(Netty, port = 8080, host = "192.168.1.5")  {
 
         install(ContentNegotiation) {

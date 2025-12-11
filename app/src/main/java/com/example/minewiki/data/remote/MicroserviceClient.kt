@@ -11,7 +11,7 @@ interface MicroserviceApi {
 }
 
 object MicroserviceClient {
-    private const val BASE_URL = "http://192.168.1.5:8080/"
+    private const val BASE_URL = "http://192.168.1.5:8080/" //sacar ip   ipconfig
 
     val instance: MicroserviceApi by lazy {
         Retrofit.Builder()
