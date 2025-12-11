@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginHorizontal="16dp"
+    android:layout_marginVertical="8dp"
+    app:cardBackgroundColor="#2A2A2A"
+    app:cardCornerRadius="12dp"
+    app:cardElevation="4dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="16dp"
+        android:gravity="center_vertical">
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            app:cardCornerRadius="40dp"
+            app:cardBackgroundColor="#222222"
+            app:cardElevation="0dp">
+
+            <ImageView
+                android:id="@+id/imgMob"  android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:padding="8dp"
+                android:scaleType="fitCenter"
+                android:src="@android:drawable/ic_menu_help"/>
+        </androidx.cardview.widget.CardView>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:layout_marginStart="16dp">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical">
+
+                <TextView
+                    android:id="@+id/tvMobName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Nombre Mob"
+                    android:textColor="@android:color/white"
+                    android:textStyle="bold"
+                    android:textSize="18sp"/>
+
+                <TextView
+                    android:id="@+id/tvMobType"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="TIPO"
+                    android:textSize="10sp"
+                    android:textColor="@android:color/white"
+                    android:textStyle="bold"
+                    android:background="#FF5555"
+                    android:paddingHorizontal="6dp"
+                    android:paddingVertical="2dp"
+                    android:layout_marginStart="8dp"/>
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/tvMobDesc"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Descripción..."
+                android:textColor="#CCCCCC"
+                android:textSize="12sp"
+                android:layout_marginTop="4dp"/>
+
+            <TextView
+                android:id="@+id/tvMobHealth"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="❤ Vida"
+                android:textColor="#FF5555"
+                android:textStyle="bold"
+                android:textSize="12sp"
+                android:layout_marginTop="4dp"/>
+
+            <TextView
+                android:id="@+id/tvMobDrops"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="🎁 Drops"
+                android:textColor="#AAAAAA"
+                android:textSize="11sp"
+                android:layout_marginTop="4dp"/>
+
+            <TextView
+                android:id="@+id/tvMobSpawn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="🌎 Spawn"
+                android:textColor="#AAAAAA"
+                android:textSize="11sp"
+                android:layout_marginTop="2dp"/>
+        </LinearLayout>
+    </LinearLayout>
+</androidx.cardview.widget.CardView>

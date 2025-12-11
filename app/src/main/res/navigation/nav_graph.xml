@@ -4,6 +4,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
     app:startDestination="@id/loginFragment">
+    <fragment
+        android:id="@+id/mobsFragment"
+        android:name="com.example.minewiki.ui.mobs.MobsFragment"
+        android:label="Mobs"
+        tools:layout="@layout/fragment_mobs" />
 
     <fragment
         android:id="@+id/recipesFragment"
