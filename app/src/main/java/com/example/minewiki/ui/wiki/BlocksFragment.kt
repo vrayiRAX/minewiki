@@ -5,6 +5,7 @@ import android.view.View
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController // Importar
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.minewiki.R
@@ -29,6 +30,11 @@ class BlocksFragment : Fragment(R.layout.fragment_blocks) {
             if (cargando) {
                 Toast.makeText(context, "Descargando bloques...", Toast.LENGTH_SHORT).show()
             }
+        }
+
+        // --- SOLO AGREGUÉ ESTO ---
+        view.findViewById<View>(R.id.btnBack).setOnClickListener {
+            findNavController().popBackStack()
         }
     }
 }

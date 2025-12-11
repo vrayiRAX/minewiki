@@ -3,10 +3,11 @@ package com.example.minewiki.ui.recipes
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController // Importar
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.minewiki.R
-import com.example.minewiki.data.local.RecipeData // Importamos nuestros datos locales
+import com.example.minewiki.data.local.RecipeData
 
 class RecipesFragment : Fragment(R.layout.fragment_recipes) {
 
@@ -14,12 +15,12 @@ class RecipesFragment : Fragment(R.layout.fragment_recipes) {
         super.onViewCreated(view, savedInstanceState)
 
         val rvRecipes = view.findViewById<RecyclerView>(R.id.rvRecipes)
-
-        // Configuramos el RecyclerView
         rvRecipes.layoutManager = LinearLayoutManager(context)
-
-        // CARGAMOS LOS DATOS LOCALES DIRECTAMENTE
-        // Ya no necesitamos llamar al servidor ni usar try-catch
         rvRecipes.adapter = RecipeAdapter(RecipeData.recipes)
+
+        // --- SOLO AGREGUÉ ESTO ---
+        view.findViewById<View>(R.id.btnBack).setOnClickListener {
+            findNavController().popBackStack()
+        }
     }
 }
