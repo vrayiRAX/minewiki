@@ -5,6 +5,11 @@
     android:id="@+id/nav_graph"
     app:startDestination="@id/loginFragment">
     <fragment
+        android:id="@+id/enchantmentsFragment"
+        android:name="com.example.minewiki.ui.enchantments.EnchantmentsFragment"
+        android:label="Encantamientos"
+        tools:layout="@layout/fragment_enchantments" />
+    <fragment
         android:id="@+id/mobsFragment"
         android:name="com.example.minewiki.ui.mobs.MobsFragment"
         android:label="Mobs"
