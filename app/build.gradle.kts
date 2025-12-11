@@ -42,6 +42,7 @@ android {
 }
 
 dependencies {
+    implementation("io.coil-kt:coil:2.4.0")
     implementation("io.coil-kt:coil:2.6.0")
     implementation("androidx.navigation:navigation-fragment-ktx:2.7.7")
     implementation("androidx.navigation:navigation-ui-ktx:2.7.7")

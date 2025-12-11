@@ -6,6 +6,12 @@
     app:startDestination="@id/loginFragment">
 
     <fragment
+        android:id="@+id/recipesFragment"
+        android:name="com.example.minewiki.ui.recipes.RecipesFragment"
+        android:label="Crafteos"
+        tools:layout="@layout/fragment_recipes" />
+
+    <fragment
         android:id="@+id/loginFragment"
         android:name="com.example.minewiki.ui.auth.LoginFragment"
         android:label="Login"
@@ -56,6 +62,10 @@
         <action
             android:id="@+id/action_home_to_blocks"
             app:destination="@id/blocksFragment" />
+
+        <action
+            android:id="@+id/action_home_to_recipes"
+            app:destination="@id/recipesFragment" />
 
     </fragment>
 

@@ -92,6 +92,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
     private fun showMainMenu(view: View) {
         val popup = PopupMenu(context, view)
         popup.menu.add(0, 1, 0, "Wiki de Bloques")
+        popup.menu.add(0, 2, 0, "Mesa de Crafteo")
         popup.menu.add(0, 2, 0, "Cerrar Sesión")
 
         popup.setOnMenuItemClickListener { menuItem ->
@@ -101,10 +102,14 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
                     true
                 }
                 2 -> {
-                    val sharedPref = requireActivity().getSharedPreferences("MineWikiData", 0)
-                    sharedPref.edit().remove("current_user_id").apply()
-                    findNavController().navigate(R.id.action_home_to_login)
+                    findNavController().navigate(R.id.action_home_to_recipes)
                     true
+                }
+                3 -> {
+                val sharedPref = requireActivity().getSharedPreferences("MineWikiData", 0)
+                sharedPref.edit().remove("current_user_id").apply()
+                findNavController().navigate(R.id.action_home_to_login)
+                true
                 }
                 else -> false
             }
