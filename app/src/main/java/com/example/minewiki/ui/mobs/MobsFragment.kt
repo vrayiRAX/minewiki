@@ -3,7 +3,7 @@ package com.example.minewiki.ui.mobs
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
-import androidx.navigation.fragment.findNavController // Importar esto
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.minewiki.R
@@ -17,7 +17,6 @@ class MobsFragment : Fragment(R.layout.fragment_mobs) {
         rvMobs.layoutManager = LinearLayoutManager(context)
         rvMobs.adapter = MobAdapter(MobData.mobs)
 
-        // --- SOLO AGREGUÉ ESTO ---
         view.findViewById<View>(R.id.btnBack).setOnClickListener {
             findNavController().popBackStack()
         }

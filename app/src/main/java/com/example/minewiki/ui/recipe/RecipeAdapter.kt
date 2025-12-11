@@ -14,8 +14,6 @@ import com.example.minewiki.R
 import com.example.minewiki.data.model.Recipe
 
 class RecipeAdapter(private val recipes: List<Recipe>) : RecyclerView.Adapter<RecipeAdapter.RecipeViewHolder>() {
-
-    // Usamos la 1.19.1 que tiene nombres modernos (oak_planks, crafting_table)
     private val BASE_URL = "https://raw.githubusercontent.com/PrismarineJS/minecraft-assets/master/data/1.19.1/"
 
     class RecipeViewHolder(view: View) : RecyclerView.ViewHolder(view) {
@@ -34,10 +32,9 @@ class RecipeAdapter(private val recipes: List<Recipe>) : RecyclerView.Adapter<Re
 
         holder.tvName.text = recipe.name
 
-        // 1. CARGAR RESULTADO (Inteligente)
+        // CARGAR RESULTADO
         cargarImagenInteligente(holder.imgResult, recipe.output_id)
 
-        // 2. CARGAR GRILLA
         holder.gridLayout.removeAllViews()
         val slotSizePx = (35 * Resources.getSystem().displayMetrics.density).toInt()
         val marginPx = (2 * Resources.getSystem().displayMetrics.density).toInt()
@@ -60,22 +57,18 @@ class RecipeAdapter(private val recipes: List<Recipe>) : RecyclerView.Adapter<Re
         }
     }
 
-    // --- MAGIA: Intenta Items, si falla, intenta Blocks ---
     private fun cargarImagenInteligente(imageView: ImageView, id: String) {
         val urlItem = "${BASE_URL}items/$id.png"
         val urlBlock = "${BASE_URL}blocks/$id.png"
 
-        // Intento 1: Buscar en ITEMS
+        // Buscar en ITEMS
         imageView.load(urlItem) {
             crossfade(true)
             placeholder(android.R.drawable.ic_menu_rotate)
 
-            // SI FALLA (listener onError), intentamos buscar en BLOCKS
             listener(
                 onError = { _, _ ->
-                    // Intento 2: Buscar en BLOCKS
                     imageView.load(urlBlock) {
-                        // Si falla aquí también, ponemos error rojo
                         error(android.R.drawable.stat_notify_error)
                         listener(onError = { _, res ->
                             Log.e("WIKI_FAIL", "No se encontró '$id' en items ni blocks. Verifica el nombre.")

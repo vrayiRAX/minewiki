@@ -15,7 +15,7 @@ object RecipeData {
         ),
         Recipe(
             name = "Mesa de Crafteo",
-            output_id = "crafting_table", // En 1.19 se llama así (sin _front)
+            output_id = "crafting_table",
             grid = listOf(
                 "oak_planks", "oak_planks", "air",
                 "oak_planks", "oak_planks", "air",

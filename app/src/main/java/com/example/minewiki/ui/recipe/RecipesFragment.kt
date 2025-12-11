@@ -3,7 +3,7 @@ package com.example.minewiki.ui.recipes
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
-import androidx.navigation.fragment.findNavController // Importar
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.minewiki.R
@@ -18,7 +18,6 @@ class RecipesFragment : Fragment(R.layout.fragment_recipes) {
         rvRecipes.layoutManager = LinearLayoutManager(context)
         rvRecipes.adapter = RecipeAdapter(RecipeData.recipes)
 
-        // --- SOLO AGREGUÉ ESTO ---
         view.findViewById<View>(R.id.btnBack).setOnClickListener {
             findNavController().popBackStack()
         }
