@@ -181,12 +181,63 @@
                     </LinearLayout>
                 </androidx.cardview.widget.CardView>
 
+                <!-- TARJETA ACCESO AL ASISTENTE IA CHATBOT -->
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/cardAiChat"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="24dp"
+                    app:cardBackgroundColor="@color/mc_bg_card"
+                    app:cardCornerRadius="0dp"
+                    app:cardElevation="4dp"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:foreground="?attr/selectableItemBackground">
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:padding="16dp"
+                        android:gravity="center_vertical">
+                        <TextView
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
+                            android:text="🤖"
+                            android:textSize="28sp"
+                            android:gravity="center"
+                            android:layout_marginEnd="16dp"/>
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:orientation="vertical">
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="ASISTENTE IA DE MINECRAFT"
+                                android:textColor="@color/mc_green_face"
+                                android:textStyle="bold"
+                                android:textSize="14sp"
+                                android:letterSpacing="0.05"/>
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Responde tus dudas de crafteo, biomas, mobs y redstone 💬"
+                                android:textColor="@color/white"
+                                android:textSize="12sp"
+                                android:layout_marginTop="2dp"/>
+                        </LinearLayout>
+                    </LinearLayout>
+                </androidx.cardview.widget.CardView>
+
                 <TextView
+                    android:id="@+id/tvNewsHeader"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="DESTACADOS 1.21"
-                    android:textColor="@color/white"
+                    android:text="NOTICIAS Y SNAPSHOTS (IA EN VIVO)"
+                    android:textColor="@color/mc_green_face"
                     android:textStyle="bold"
+                    android:letterSpacing="0.05"
                     android:layout_marginBottom="10dp"/>
 
                 <HorizontalScrollView
@@ -196,6 +247,7 @@
                     android:clipToPadding="false"
                     android:layout_marginBottom="24dp">
                     <LinearLayout
+                        android:id="@+id/layoutNewsContainer"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal">

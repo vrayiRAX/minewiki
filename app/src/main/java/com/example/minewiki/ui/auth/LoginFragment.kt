@@ -40,10 +40,17 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
 
                     // Guardar sesión
                     val prefs = requireActivity().getSharedPreferences("MineWikiSesion", Context.MODE_PRIVATE)
-                    val editor = prefs.edit()
-                    editor.putBoolean("esta_logueado", true)
-                    editor.putString("current_user_name", user.name)
-                    editor.apply()
+                    prefs.edit()
+                        .putBoolean("esta_logueado", true)
+                        .putString("current_user_name", user.name)
+                        .putInt("current_user_id", user.id)
+                        .apply()
+
+                    val dataPrefs = requireActivity().getSharedPreferences("MineWikiData", Context.MODE_PRIVATE)
+                    dataPrefs.edit()
+                        .putInt("current_user_id", user.id)
+                        .putString("current_user_name", user.name)
+                        .apply()
 
                     Toast.makeText(context, "¡Hola de nuevo, ${user.name}!", Toast.LENGTH_SHORT).show()
                     findNavController().navigate(R.id.action_login_to_home)

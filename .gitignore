@@ -13,3 +13,11 @@
 .externalNativeBuild
 .cxx
 local.properties
+
+# Python & Environment
+.env
+.venv/
+venv/
+__pycache__/
+*.pyc
+myserver/bin/

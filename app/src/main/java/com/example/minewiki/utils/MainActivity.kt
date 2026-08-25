@@ -19,6 +19,16 @@ class MainActivity : AppCompatActivity() {
             .findFragmentById(R.id.nav_host_fragment) as NavHostFragment
 
         navController = navHostFragment.navController
+
+        // Verificar si la sesión del usuario está activa para ir directo a HomeFragment
+        val prefs = getSharedPreferences("MineWikiSesion", MODE_PRIVATE)
+        val estaLogueado = prefs.getBoolean("esta_logueado", false)
+
+        if (estaLogueado) {
+            val navGraph = navController.navInflater.inflate(R.navigation.nav_graph)
+            navGraph.setStartDestination(R.id.homeFragment)
+            navController.graph = navGraph
+        }
     }
 
     override fun onSupportNavigateUp(): Boolean {

@@ -77,6 +77,10 @@
             android:id="@+id/action_home_to_recipes"
             app:destination="@id/recipesFragment" />
 
+        <action
+            android:id="@+id/action_home_to_chat"
+            app:destination="@id/chatFragment" />
+
     </fragment>
 
     <fragment
@@ -90,5 +94,11 @@
         android:name="com.example.minewiki.ui.wiki.BlocksFragment"
         android:label="Wiki de Bloques"
         tools:layout="@layout/fragment_blocks" />
+
+    <fragment
+        android:id="@+id/chatFragment"
+        android:name="com.example.minewiki.ui.chat.ChatFragment"
+        android:label="Asistente IA Minecraft"
+        tools:layout="@layout/fragment_chat" />
 
 </navigation>

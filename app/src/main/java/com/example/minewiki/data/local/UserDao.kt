@@ -12,6 +12,12 @@ interface UserDao {
     @Query("SELECT * FROM users WHERE email = :email AND password = :pass LIMIT 1")
     suspend fun login(email: String, pass: String): UserEntity?
 
+    @Query("SELECT * FROM users WHERE name = :name LIMIT 1")
+    suspend fun findByName(name: String): UserEntity?
+
     @Query("SELECT * FROM users WHERE id = :userId LIMIT 1")
     suspend fun getUserById(userId: Int): UserEntity?
+
+    @Query("UPDATE users SET profileImage = :imagePath WHERE id = :userId")
+    suspend fun updateProfileImage(userId: Int, imagePath: String)
 }

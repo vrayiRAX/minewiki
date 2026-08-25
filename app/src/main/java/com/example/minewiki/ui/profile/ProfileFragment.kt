@@ -30,19 +30,17 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
     // GALERÍA
     private val selectFromGallery = registerForActivityResult(ActivityResultContracts.GetContent()) { uri ->
         uri?.let {
-            imgProfile.load(it)
-            saveProfileImage(it.toString())
+            processAndSaveImage(it)
         }
     }
 
-    //CÁMARA
+    // CÁMARA
     private val takePhoto = registerForActivityResult(ActivityResultContracts.TakePicture()) { isSuccess ->
         if (isSuccess && latestTmpUri != null) {
-            imgProfile.load(latestTmpUri)
-            saveProfileImage(latestTmpUri.toString())
-            Toast.makeText(context, "¡Foto capturada!", Toast.LENGTH_SHORT).show()
+            processAndSaveImage(latestTmpUri!!)
         }
     }
+
     private val requestPermissionLauncher = registerForActivityResult(
         ActivityResultContracts.RequestPermission()
     ) { isGranted: Boolean ->
@@ -74,16 +72,39 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
                     if (user != null) {
                         tvName.text = user.name.uppercase()
                         tvEmail.text = user.email
-                        val savedImage = sharedPref.getString("profile_image_$currentUserId", null)
-                        if (savedImage != null) {
-                            imgProfile.load(Uri.parse(savedImage))
+
+                        // Intentar cargar la foto guardada desde SharedPreferences o Base de datos
+                        val savedPath = sharedPref.getString("profile_image_$currentUserId", null) ?: user.profileImage
+                        if (!savedPath.isNullOrEmpty()) {
+                            val imgFile = File(savedPath)
+                            if (imgFile.exists()) {
+                                imgProfile.load(imgFile)
+                            } else {
+                                imgProfile.load(Uri.parse(savedPath))
+                            }
                         }
                     }
-                } catch (e: Exception) {}
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                }
             }
         }
 
-        // AC BOTONES
+        val btnBack = view.findViewById<android.widget.ImageButton>(R.id.btnBack)
+        val btnGoHome = view.findViewById<Button>(R.id.btnGoHome)
+
+        btnBack?.setOnClickListener {
+            findNavController().popBackStack()
+        }
+
+        btnGoHome?.setOnClickListener {
+            try {
+                findNavController().navigate(R.id.homeFragment)
+            } catch (e: Exception) {
+                findNavController().popBackStack()
+            }
+        }
+
         btnGallery.setOnClickListener {
             selectFromGallery.launch("image/*")
         }
@@ -97,7 +118,10 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
         }
 
         btnLogout.setOnClickListener {
-            sharedPref.edit().remove("current_user_id").apply()
+            val sesionPref = requireActivity().getSharedPreferences("MineWikiSesion", android.content.Context.MODE_PRIVATE)
+            sesionPref.edit().clear().apply()
+            sharedPref.edit().clear().apply()
+
             try {
                 findNavController().navigate(R.id.loginFragment)
             } catch (e: Exception) {
@@ -108,7 +132,7 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
 
     private fun abrirCamara() {
         try {
-            val tmpFile = File.createTempFile("tmp_image_file", ".png", requireContext().cacheDir).apply {
+            val tmpFile = File.createTempFile("tmp_image_file", ".jpg", requireContext().cacheDir).apply {
                 createNewFile()
                 deleteOnExit()
             }
@@ -122,15 +146,44 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
             )
             takePhoto.launch(latestTmpUri)
         } catch (e: Exception) {
-            Toast.makeText(context, "Error: ${e.message}", Toast.LENGTH_LONG).show()
+            Toast.makeText(context, "Error cámara: ${e.message}", Toast.LENGTH_LONG).show()
             e.printStackTrace()
         }
     }
 
-    private fun saveProfileImage(uriString: String) {
-        if (currentUserId != -1) {
-            val sharedPref = requireActivity().getSharedPreferences("MineWikiData", 0)
-            sharedPref.edit().putString("profile_image_$currentUserId", uriString).apply()
+    private fun processAndSaveImage(sourceUri: Uri) {
+        if (currentUserId == -1) return
+
+        lifecycleScope.launch {
+            try {
+                // Copiar la imagen a la memoria interna privada de la app para que NUNCA se pierda ni venza el permiso
+                val destinationFile = File(requireContext().filesDir, "profile_user_$currentUserId.jpg")
+
+                requireContext().contentResolver.openInputStream(sourceUri)?.use { input ->
+                    destinationFile.outputStream().use { output ->
+                        input.copyTo(output)
+                    }
+                }
+
+                val permanentPath = destinationFile.absolutePath
+
+                // 1. Mostrar en pantalla de inmediato
+                imgProfile.load(destinationFile)
+
+                // 2. Guardar ruta permanente en SharedPreferences
+                val sharedPref = requireActivity().getSharedPreferences("MineWikiData", 0)
+                sharedPref.edit().putString("profile_image_$currentUserId", permanentPath).apply()
+
+                // 3. Guardar ruta en la base de datos Room
+                val db = AppDatabase.getDatabase(requireContext())
+                db.userDao().updateProfileImage(currentUserId, permanentPath)
+
+                Toast.makeText(context, "¡Foto de perfil guardada exitosamente!", Toast.LENGTH_SHORT).show()
+
+            } catch (e: Exception) {
+                Toast.makeText(context, "Error al guardar foto: ${e.message}", Toast.LENGTH_SHORT).show()
+                e.printStackTrace()
+            }
         }
     }
 }

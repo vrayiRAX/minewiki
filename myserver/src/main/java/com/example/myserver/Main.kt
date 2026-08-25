@@ -1,18 +1,32 @@
 package com.example.myserver
 
+import io.ktor.client.*
+import io.ktor.client.engine.cio.*
+import io.ktor.client.request.*
+import io.ktor.client.statement.*
+import io.ktor.http.*
 import io.ktor.serialization.gson.*
 import io.ktor.server.application.*
 import io.ktor.server.engine.*
 import io.ktor.server.netty.*
 import io.ktor.server.plugins.contentnegotiation.*
+import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
 
 data class Consejo(val mensaje: String)
 
 fun main() {
-            //sacar ip   ipconfig
-    embeddedServer(Netty, port = 8080, host = "192.168.1.5")  {
+    val aiServiceUrl = System.getenv("AI_SERVICE_URL") ?: "http://localhost:8000"
+    val client = HttpClient(CIO) {
+        install(io.ktor.client.plugins.HttpTimeout) {
+            requestTimeoutMillis = 120_000
+            connectTimeoutMillis = 60_000
+            socketTimeoutMillis = 120_000
+        }
+    }
+
+    embeddedServer(Netty, port = 8080, host = "0.0.0.0") {
 
         install(ContentNegotiation) {
             gson()
@@ -21,9 +35,10 @@ fun main() {
         routing {
 
             get("/") {
-                call.respondText("¡Servidor de MineWiki funcionando!")
+                call.respondText("¡Servidor Backend Gateway de MineWiki funcionando!")
             }
 
+            // Endpoint clásico de consejos estáticos
             get("/consejo") {
                 val listaConsejos = listOf(
                     "Nunca caves directamente hacia abajo.",
@@ -54,6 +69,75 @@ fun main() {
 
                 call.respond(Consejo(consejoRandom))
             }
+
+            // --- ENDPOINTS INTEGRADOS DE INTELIGENCIA ARTIFICIAL ---
+
+            // Proxy Chat Asistente IA
+            post("/api/ai/chat") {
+                try {
+                    val body = call.receiveText()
+                    val response: HttpResponse = client.post("$aiServiceUrl/api/v1/chat") {
+                        contentType(ContentType.Application.Json)
+                        setBody(body)
+                    }
+                    call.respondText(response.bodyAsText(), ContentType.Application.Json, response.status)
+                } catch (e: Exception) {
+                    call.respondText(
+                        """{"reply": "El servidor IA tardó en responder. Intenta enviar tu pregunta de nuevo: ${e.message}", "model_used": "Timeout Fallback", "is_mock": true}""",
+                        ContentType.Application.Json,
+                        HttpStatusCode.OK
+                    )
+                }
+            }
+
+            // Proxy Tip Dinámico con IA
+            get("/api/ai/consejo") {
+                try {
+                    val category = call.request.queryParameters["category"] ?: ""
+                    val url = if (category.isNotEmpty()) "$aiServiceUrl/api/v1/tip?category=$category" else "$aiServiceUrl/api/v1/tip"
+                    val response: HttpResponse = client.get(url)
+                    call.respondText(response.bodyAsText(), ContentType.Application.Json, response.status)
+                } catch (e: Exception) {
+                    call.respondText(
+                        """{"tip": "Consejo de respaldo: Nunca caves directo abajo.", "source": "Fallback Local"}""",
+                        ContentType.Application.Json,
+                        HttpStatusCode.OK
+                    )
+                }
+            }
+
+            // Proxy RAG sobre la Wiki
+            post("/api/ai/rag") {
+                try {
+                    val body = call.receiveText()
+                    val response: HttpResponse = client.post("$aiServiceUrl/api/v1/rag/ask") {
+                        contentType(ContentType.Application.Json)
+                        setBody(body)
+                    }
+                    call.respondText(response.bodyAsText(), ContentType.Application.Json, response.status)
+                } catch (e: Exception) {
+                    call.respondText(
+                        """{"answer": "Error al consultar la Wiki vectorial: ${e.message}", "sources": []}""",
+                        ContentType.Application.Json,
+                        HttpStatusCode.InternalServerError
+                    )
+                }
+            }
+
+            // Proxy Noticias IA de Minecraft (Snapshots, Versiones)
+            get("/api/ai/noticias") {
+                try {
+                    val response: HttpResponse = client.get("$aiServiceUrl/api/v1/news")
+                    call.respondText(response.bodyAsText(), ContentType.Application.Json, response.status)
+                } catch (e: Exception) {
+                    call.respondText(
+                        """{"news": [], "source": "Fallback Local Error"}""",
+                        ContentType.Application.Json,
+                        HttpStatusCode.OK
+                    )
+                }
+            }
+
         }
     }.start(wait = true)
 }
